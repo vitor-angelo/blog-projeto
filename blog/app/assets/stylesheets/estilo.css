@@ -1,0 +1,47 @@
+.btn a
+{
+	color: black;
+	text-decoration: none;
+}
+
+.div-form-comentario
+{
+	max-width: 750px;
+}
+
+.navbar
+{
+	border-radius: 0;
+}
+
+.nome_blog
+{
+	color: white;
+	font-size: 1.5em;
+	font-weight: bold;
+	margin-right: 1em;
+}
+
+.nome_blog:hover
+{
+	color: white;
+	text-decoration: none;
+}
+
+.seletor-pagina
+{
+	font-size: 1.5em;
+	text-align: center;
+	width: 100%;
+}
+
+article
+{
+	font-size: 16px;
+}
+
+h1
+{
+	margin-bottom: 0.8em;
+	margin-left: 1rem;
+}

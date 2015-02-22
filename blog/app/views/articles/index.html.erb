@@ -1,0 +1,60 @@
+<%
+	require 'time'
+	def formatar_data( data )
+		return Time.parse(data.to_s).strftime("%d/%m/%Y - %H:%M")
+	end
+	
+	total = 10
+	if params[:pag].blank? || params[:pag].to_i < 1
+		pagina = 1
+	else
+		pagina = params[:pag].to_i
+	end
+%>
+
+<div class="navbar navbar-inverse container-fluid">
+	<%= link_to "Blog", articles_path, {:class => "nome_blog"} %>
+	<%= link_to new_article_path do %>
+		<div class="btn btn-default navbar-btn">Novo Artigo</div>
+	<% end %>
+</div>
+
+<h1>Artigos</h1>
+<% @articles.reverse[(pagina-1)*total,total].each do |article| %>
+	<div class="container-fluid col-sm-4">
+		<div class="panel panel-default">
+			
+			<div class="panel-heading">
+				<%= article.title %><br/>
+			</div>
+			
+			<div class="panel-body">
+				<%= article.text[0, 50] %><br/><br/>
+				<small>Criado em <%= formatar_data(article.created_at) %></small>
+			</div>
+			
+			<div class="panel-footer clearfix">
+				<div class="pull-right">
+					<%= link_to 'Apagar', article_path(article),
+						{:class => "btn btn btn-default",
+						method: :delete,
+						data: {confirm: 'Deseja excluir?'}}%>					
+
+					<!--<%= link_to 'Editar', edit_article_path(article),
+						{:class => "btn btn-default"} %>-->
+				
+					<%= link_to 'Ver', article_path(article),
+						{:class => "btn btn-primary"} %>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+<% end %>
+
+<nav class="navbar navbar-default navbar-fixed-bottom seletor-pagina">
+	<% [*1..(@articles.size-1)/total+1].each do |numero| %>
+		<%= link_to numero, articles_path(pag:numero ) %>
+		&nbsp;
+	<% end %>
+</nav>

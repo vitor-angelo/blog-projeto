@@ -1,0 +1,69 @@
+<%
+	require 'time'
+	def formatar_data( data )
+		return Time.parse(data.to_s).strftime("%d/%m/%Y - %H:%M")
+	end
+	
+	total = 10
+	if params[:pag].blank? || params[:pag].to_i < 1
+		pagina = 1
+	else
+		pagina = params[:pag].to_i
+	end
+%>
+
+<div class="navbar navbar-inverse container-fluid">
+	<%= link_to "Blog", articles_path, {:class => "nome_blog"} %>
+	<%= link_to edit_article_path(@article) do %>
+		<div class="btn btn-default navbar-btn">Editar</div>
+	<% end %>
+</div>
+
+<h1><%= @article.title %></h1>
+
+<article class="container-fluid">
+	<%= @article.text %><br/><br/>
+	<small>Postado em: <%=formatar_data(@article.created_at)%><br/>
+	Última atualização: <%=formatar_data(@article.updated_at)%></small>
+</article>
+<hr/>
+
+
+<div class="container-fluid">
+	<h2 id="comentarios">Comentários</h2>
+	
+	<% @article.comments.reverse[(pagina-1)*total,total].each do |comment| %>
+		<strong>
+			<%= comment.commenter %>
+		</strong>&nbsp;&nbsp;&nbsp;&nbsp;
+		<%= link_to 'Editar', edit_article_comment_path(comment.article, comment) %> -
+		<%= link_to 'Deletar', [comment.article, comment], method: :delete, data: { confirm: 'Deseja excluir?' } %>
+		
+		<div class="container-fluid">
+			<small>Postado em: <%=formatar_data(comment.created_at)%> /
+			Última atualização: <%=formatar_data(comment.updated_at)%></small><br/>
+			<%= comment.body %>
+		</div>
+		<hr/>
+	<% end %>
+	
+	<nav class="seletor-pagina">
+		<% [*1..(@article.comments.size-1)/total+1].each do |numero| %>
+			<%= link_to numero, article_path(@article, anchor: "comentarios", pag:numero ) %>
+		<% end %>
+	</nav>
+	
+	<%= form_for([@article, @article.comments.build]) do |f| %>
+		<div class="form-group">
+			<%= f.label :Nome %><br>
+			<%= f.text_field :commenter, :class => "form-control" %>
+		</div>
+		<div class="form-group">
+			<%= f.label :Comentário %><br>
+			<%= f.text_area :body, :class => "form-control" %>
+		</div>
+		<div class="form-group">
+			<%= f.submit %>
+		</div>
+	<% end %>
+</div>

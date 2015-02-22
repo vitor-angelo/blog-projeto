@@ -1,0 +1,40 @@
+<div class="navbar navbar-inverse container-fluid">
+	<%= link_to "Blog", articles_path, {:class => "nome_blog"} %>
+</div>
+
+<h1>Editar Comentário</h1>
+
+<div class="div-form-comentario container-fluid">
+	<%= form_for :comment, url: article_comment_path(@comment.article, @comment), method: :patch do |f| %>
+		<% if !@comment.nil? && @comment.errors.any? %>
+			<div id="error_explanation">
+				<p>
+					<%= pluralize(@comment.errors.count, "error") %> prohibited
+					this article from being saved:
+				</p>
+				<ol>
+					<% @comment.errors.full_messages.each do |msg| %>
+						<li><%= msg %></li>
+					<% end %>
+				</ol>
+			</div>
+		<% end %>
+
+		<div class="form-group">
+			<%= f.label "Nome" %>
+			<%= f.text_field :commenter, :class => "form-control" %><br>
+		</div>
+	
+		<div class="form-group">
+			<%= f.label "Comentário" %>
+			<%= f.text_area :body, :class => "form-control" %>
+		</div>
+	 
+		<div class="form-group">
+			<%= f.submit "Enviar", :class => "btn btn btn-default" %>
+			<%= link_to articles_path do %>
+				<div class="btn btn-default">Cancelar</div>
+			<% end %>
+		</div>
+	<% end %>
+</div>
